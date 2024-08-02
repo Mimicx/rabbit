@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  rabbitmq_source:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_source
+    ports:
+      - "5672:5672"  # Puerto de RabbitMQ
+      - "15672:15672" # Puerto de la consola de administración
+    environment:
+      RABBITMQ_DEFAULT_USER: comsys
+      RABBITMQ_DEFAULT_PASS: comsys12
+    volumes:
+      - rabbitmq_source_data:/var/lib/rabbitmq
+      - ./rabbitmq_source/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./rabbitmq_source/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+
+  rabbitmq_destination:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_destination
+    ports:
+      - "5673:5672"  # Puerto de RabbitMQ
+      - "15673:15672" # Puerto de la consola de administración
+    environment:
+      RABBITMQ_DEFAULT_USER: comsys
+      RABBITMQ_DEFAULT_PASS: comsys12
+    volumes:
+      - rabbitmq_destination_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq_source_data:
+    driver: local
+  rabbitmq_destination_data:
+    driver: local
